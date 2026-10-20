@@ -1,0 +1,10 @@
+, {
+    "step_title": "MeTube",
+    "items": [{
+        "type": "textfield",
+        "desc": "Where downloads go: a folder inside one of your shared folders. The package makes the last folder (<b>MeTube</b> here) if it may write in the shared folder, but never makes a shared folder itself — create a <b>Downloads</b> shared folder first in Control Panel → Shared Folder if you don't have one. If the package's user isn't allowed to write there, the MeTube window shows exactly what to tick. It can be changed later in the window (Defaults).",
+        "subitems": [{ "key": "wizard_dl_dir", "desc": "Download folder", "defaultValue": "$(for d in /volume*/Downloads /volume*/downloads /volume*/Download; do [ -d "$d" ] && { echo "$d/MeTube"; break; }; done)", "emptyText": "/volume1/Downloads/MeTube", "validator": { "allowBlank": false, "regex": { "expr": "/^\\\\/volume(USB)?[0-9]+(-[0-9]+)?\\\\/[^@#\\\\/][^\\\\/]*(\\\\/[^\\\\/]+)*\\\\/?\$/", "errorText": "A folder like /volume1/Downloads/MeTube" } } }]
+    }, {
+        "desc": "MeTube downloads from YouTube and many other sites with yt-dlp. Only download what you have the right to — your own videos, Creative Commons and public-domain works, or what a site allows you to save — and respect each site's terms. MeTube's page has no sign-in of its own: keep it on your own network."
+    }]
+}

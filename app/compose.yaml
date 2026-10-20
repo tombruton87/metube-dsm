@@ -1,0 +1,60 @@
+# MeTube, as the Synology package runs it: the compose project in the metube
+# shared folder. The setup container writes .env beside this.
+# MeTube's state (queue, finished and failed downloads, subscriptions, an
+# uploaded cookies file) lives in the metube_state volume; backups go to the
+# share. Downloads go into the shared folder you picked (a "Downloads" share,
+# subfolder MeTube, unless you chose another), mounted read-write at
+# /downloads. A shared folder is never created: while it's missing, an empty
+# placeholder from this share stands in and the window says what to do.
+# MeTube runs as the package's own user, so the files it saves belong to it.
+services:
+  server:
+    image: ${MT_IMAGE:-ghcr.io/alexta69/metube:2026.10.19}
+    container_name: metube-server
+    restart: unless-stopped
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    ports:
+      - "${HTTP_PORT:-8081}:8081"
+    volumes:
+      - state:/state
+      - type: bind
+        source: ${DL_SRC:-./no-folder}
+        target: /downloads
+        bind:
+          create_host_path: false
+      # The page links from your phone or browser go to (Share to MeTube in the window)
+      - type: bind
+        source: ./www/dsm-share.html
+        target: /app/ui/dist/metube/browser/dsm-share.html
+        read_only: true
+        bind:
+          create_host_path: false
+    environment:
+      TZ: ${TZ:-UTC}
+      UMASK: "002"
+      DOWNLOAD_DIR: /downloads
+      STATE_DIR: /state
+      # Unfinished downloads: hidden in the download folder, so finishing one is a rename, not a copy
+      TEMP_DIR: /downloads/.incomplete
+      XDG_CACHE_HOME: /tmp/cache
+      OUTPUT_TEMPLATE: ${OUTPUT_TEMPLATE:-%(title)s.%(ext)s}
+      OUTPUT_TEMPLATE_PLAYLIST: ${OUTPUT_TEMPLATE_PLAYLIST:-%(playlist_title)s/%(title)s.%(ext)s}
+      MAX_CONCURRENT_DOWNLOADS: ${MT_MAX_DL:-3}
+      # Subtitles, metadata and SMB-safe file names, from the window's Defaults tab (JSON)
+      YTDL_OPTIONS: ${YTDL_OPTS}
+      # "Cover art in the video file", applied by the window to MP4 and audio downloads
+      YTDL_OPTIONS_PRESETS: ${YTDL_PRESETS}
+      # Addresses on your own network (a media server, this NAS): refused unless true
+      ALLOW_PRIVATE_ADDRESSES: ${MT_LAN:-false}
+      # Removing a finished download in MeTube asks whether its file goes too
+      DELETE_FILE_ON_TRASHCAN: ask
+      DEFAULT_THEME: auto
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -m 5 http://127.0.0.1:8081/version >/dev/null"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  state:

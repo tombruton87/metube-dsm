@@ -1,0 +1,108 @@
+    <section data-page="downloads" hidden>
+      <div class="note">What MeTube is downloading, what's waiting, what finished and what failed — live while this tab is open. Add links on the <a href="#" data-goto="add">Add</a> tab, from your phone or browser (<a href="#" data-goto="share">Share to MeTube</a>), or in <a class="mt-link" href="#" target="_blank" rel="noopener">MeTube</a> itself. Only download what you have the right to, and respect each site's terms.</div>
+      <div id="d-folder"></div>
+      <div class="tiles" id="d-tiles"></div>
+      <div class="card"><h2>Downloading and waiting<span class="right muted small" id="d-live"></span></h2><table><thead><tr><th>Download</th><th>Progress</th><th class="n"></th></tr></thead><tbody id="d-queue"></tbody></table></div>
+      <div class="card"><h2>Failed<span class="right"><button class="btn" id="d-clear-failed" data-app>Clear failed</button></span></h2><table><thead><tr><th>Download</th><th>Why</th><th class="n"></th></tr></thead><tbody id="d-failed"></tbody></table></div>
+      <div class="card"><h2>Finished<span class="right"><button class="btn" id="d-clear-done" data-app>Clear finished</button></span></h2><table><thead><tr><th>Download</th><th class="n">Size</th><th>Saved in</th><th>When</th><th class="n"></th></tr></thead><tbody id="d-done"></tbody></table></div>
+      <p class="muted small">Clearing or removing takes a download off these lists only; its file stays in the download folder unless you pick Delete file. Files are listed on the <a href="#" data-goto="library">Library</a> tab.</p>
+    </section>
+
+    <section data-page="add" hidden>
+      <div class="note">Paste links from YouTube or any of the many sites yt-dlp knows, one per line (up to 20). MeTube downloads them into the download folder, in the background; the <a href="#" data-goto="downloads">Downloads</a> tab follows them. Only download what you have the right to — your own videos, Creative Commons or public-domain works, or what a site allows you to save — and respect each site's terms.</div>
+      <div id="a-folder"></div>
+      <div class="card"><h2>Download</h2><div class="in">
+        <label class="f"><span>Links, one per line</span><textarea class="urls" id="a-urls" placeholder="https://www.youtube.com/watch?v=…&#10;https://vimeo.com/…" autocomplete="off" spellcheck="false"></textarea></label>
+        <div class="row3">
+          <label class="f"><span>What</span><select id="a-kind"><option value="video">Video</option><option value="audio">Audio only</option></select></label>
+          <label class="f a-video"><span>Quality</span><select id="a-quality"><option value="best">Best available</option><option value="2160">Up to 2160p (4K)</option><option value="1080">Up to 1080p</option><option value="720">Up to 720p</option><option value="480">Up to 480p</option></select></label>
+          <label class="f a-video"><span>File type</span><select id="a-vformat"><option value="mp4">MP4 — plays everywhere</option><option value="any">Best available (WebM, MKV…)</option></select></label>
+          <label class="f a-audio" hidden><span>Audio format</span><select id="a-aformat"><option value="mp3">MP3</option><option value="m4a">M4A (AAC)</option><option value="opus">Opus</option></select></label>
+          <label class="f"><span>Subfolder (optional)</span><input type="text" id="a-folder-name" list="a-folders" maxlength="120" placeholder="e.g. Music/Live" autocomplete="off"><datalist id="a-folders"></datalist></label>
+        </div>
+        <div class="radio" style="margin-top:10px">
+          <label><input type="radio" name="a-pl" value="single" checked> Just the video, even when the link is from a playlist</label>
+          <label><input type="radio" name="a-pl" value="all"> The whole playlist, up to <input type="number" id="a-limit" min="1" max="500" value="50" style="width:70px;height:24px"> videos <span class="sub">A link to a playlist or a channel always downloads its videos, up to this number.</span></label>
+        </div>
+        <p class="row" style="margin-top:12px"><button class="btn primary" id="a-go" data-app>Download</button><span class="muted small" id="a-hint"></span></p>
+      </div></div>
+    </section>
+
+    <section data-page="library" hidden>
+      <div class="note">The files in the download folder, <b id="l-path"></b>, newest first. It's an ordinary folder in your shared folder: File Station, your computer and media apps see the same files.</div>
+      <div id="l-folder"></div>
+      <div class="tiles" id="l-tiles"></div>
+      <div class="card"><h2>Files<span class="right row"><input type="search" id="l-q" placeholder="Search…" style="width:180px"><button class="btn" data-act="libscan">Refresh</button><button class="btn danger" id="l-del" data-app>Delete selected</button></span></h2>
+        <table><thead><tr><th class="chk"><input type="checkbox" id="l-all" aria-label="Select all shown"></th><th>File</th><th class="n">Size</th><th>Downloaded</th></tr></thead><tbody id="l-files"></tbody></table>
+        <div class="in muted small" id="l-more" hidden></div></div>
+      <div class="card"><h2>Clean-up</h2><div class="in">
+        <p><label><input type="checkbox" id="l-clean-on"> Keep only the last <input type="number" id="l-clean-days" min="1" max="3650" value="30" style="width:80px;height:24px"> days of downloads</label></p>
+        <p class="muted small">Off unless you turn it on. Once a day, files downloaded longer ago than this are deleted from the download folder (for good — DSM's recycle bin doesn't catch them), and folders left empty go too. Unfinished downloads aren't touched.</p>
+        <button class="btn primary" id="l-clean-save" data-app>Save</button></div></div>
+    </section>
+
+    <section data-page="defaults" hidden>
+      <div class="note">What the <a href="#" data-goto="add">Add</a> tab and the share page start with, and the settings MeTube downloads with — also for links added in MeTube's own page. Saving restarts MeTube for a few seconds when its own settings change; downloads under way pick up where they were.</div>
+      <div class="card"><h2>What to download</h2><div class="in"><div class="row3">
+        <label class="f"><span>Usually</span><select id="f-kind"><option value="video">Video</option><option value="audio">Audio only</option></select></label>
+        <label class="f"><span>Video quality</span><select id="f-quality"><option value="best">Best available</option><option value="2160">Up to 2160p (4K)</option><option value="1080">Up to 1080p</option><option value="720">Up to 720p</option><option value="480">Up to 480p</option></select></label>
+        <label class="f"><span>Video file type</span><select id="f-vformat"><option value="mp4">MP4 — plays everywhere</option><option value="any">Best available (WebM, MKV…)</option></select></label>
+        <label class="f"><span>Audio format</span><select id="f-aformat"><option value="mp3">MP3</option><option value="m4a">M4A (AAC)</option><option value="opus">Opus</option></select></label>
+      </div></div></div>
+      <div class="card"><h2>File names</h2><div class="in radio" id="f-tpl">
+        <label><input type="radio" name="f-tpl" value="title"> Title <span class="sub">Big Buck Bunny.mp4</span></label>
+        <label><input type="radio" name="f-tpl" value="title_id"> Title and the site's video ID — never two files with the same name <span class="sub">Big Buck Bunny [aqz-KE-bpKQ].mp4</span></label>
+        <label><input type="radio" name="f-tpl" value="channel"> A folder per channel <span class="sub">Blender Studio/Big Buck Bunny.mp4</span></label>
+        <label><input type="radio" name="f-tpl" value="date"> Upload date first, so they sort by date <span class="sub">2014-11-10 Big Buck Bunny.mp4</span></label>
+        <p class="muted small">Playlists go in a folder named after the playlist. Characters Windows can't use in names (: ? * " and so on) are replaced, so every file opens over SMB.</p></div></div>
+      <div class="card"><h2>Subtitles</h2><div class="in">
+        <div class="radio"><label><input type="radio" name="f-sub" value="off"> None</label>
+          <label><input type="radio" name="f-sub" value="download"> As .srt files beside the video <span class="sub">Most players and media servers pick them up by themselves.</span></label>
+          <label><input type="radio" name="f-sub" value="embed"> Inside the video file <span class="sub">One file to move around; players offer them as a subtitle track.</span></label></div>
+        <p class="muted small" style="margin-bottom:4px">Languages (up to five), when a video has them:</p><div class="checks" id="f-langs"></div>
+        <label><input type="checkbox" id="f-sub-auto"> Also automatic (machine-made) subtitles when there are no others</label></div></div>
+      <div class="card"><h2>In the file, and how many at once</h2><div class="in">
+        <p><label><input type="checkbox" id="f-thumb"> Cover art: the video's thumbnail inside MP4 and audio files</label><br>
+        <label><input type="checkbox" id="f-meta"> Title, artist, date and description inside the file</label><br>
+        <label><input type="checkbox" id="f-lan"> Allow links to addresses on your own network (a media server, this NAS) <span class="muted small">— off by default, as a guard</span></label></p>
+        <label class="f"><span>Downloads at the same time</span><select id="f-max" style="max-width:120px"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+        <button class="btn primary" id="f-save" data-app>Save defaults</button></div></div>
+      <div class="card"><h2>Download folder</h2><div class="in">
+        <div id="f-folder-state"></div>
+        <label class="f"><span>Folder (inside a shared folder)</span><input type="text" id="f-dir" placeholder="/volume1/Downloads/MeTube" autocomplete="off"></label>
+        <p class="muted small">The package makes the last folder if it may write in the shared folder, but never makes a shared folder. MeTube runs as the package's own user, so it needs Read/Write on that shared folder (Control Panel → Shared Folder → Edit → Permissions → System internal user → metube). Files already downloaded stay where they are.</p>
+        <div class="row"><button class="btn primary" id="f-dir-save" data-app>Use this folder</button><button class="btn" data-act="libscan">Check again</button></div></div></div>
+      <div class="card"><h2>DSM notifications</h2><div class="in">
+        <p><label><input type="checkbox" id="n-failed"> When a download fails</label><br><label><input type="checkbox" id="n-done"> When a download finishes</label></p>
+        <p class="muted small">Through DSM's own notifications (the bell, and on to your phone or email as set in Control Panel → Notification). When downloads keep failing in a way that suggests yt-dlp is out of date, DSM says so either way.</p>
+        <div class="row"><button class="btn primary" id="n-save" data-app>Save</button><button class="btn" data-act="dsmtest">Send a test</button></div></div></div>
+    </section>
+
+    <section data-page="share" hidden>
+      <div class="note">Send links to MeTube without opening DSM: from your phone's Share menu, a button in your browser's bookmarks bar, or a QR code. They all go to MeTube on this Synology, with the <a href="#" data-goto="defaults">Defaults</a> you chose. They work on your own network (or over a VPN to it).</div>
+      <div class="card"><h2>QR codes</h2><div class="in"><div class="qr">
+        <figure><img id="s-qr" alt="QR code for MeTube's page"><figcaption>MeTube's page — scan it with the phone's camera, then add it to the home screen<br><span class="mono" id="s-url"></span></figcaption></figure>
+        <figure><img id="s-qr2" alt="QR code for the share page"><figcaption>The share page — paste links and tap Download<br><span class="mono" id="s-url2"></span></figcaption></figure>
+      </div></div></div>
+      <div class="card"><h2>In a browser on your computer: a bookmarklet</h2><div class="in">
+        <p>Drag this button to the bookmarks bar: <a class="bm" id="s-bm" href="#">Send to MeTube</a>. On a video's page, click it: a small MeTube tab opens with the link filled in — click Download.</p>
+        <p class="muted small">Or make a bookmark by hand and paste this as its address: <button class="btn" id="s-bm-copy">Copy</button></p><div class="mono-box" id="s-bm-code"></div></div></div>
+      <div class="card"><h2>iPhone and iPad: a Shortcut in the Share menu</h2><div class="in"><ol class="steps">
+        <li>Open <b>Shortcuts</b> → <b>+</b>. Tap the <b>ⓘ</b> (Details) and turn on <b>Show in Share Sheet</b>; under Share Sheet Types keep only <b>URLs</b> and <b>Safari web pages</b>.</li>
+        <li>Add the action <b>Get Contents of URL</b>. URL: <span class="mono" id="s-ios-url"></span> — Method: <b>POST</b> — Request Body: <b>JSON</b>, with these fields (Text): <span class="mono" id="s-ios-fields"></span>; for <b>url</b> pick the variable <b>Shortcut Input</b>.</li>
+        <li>Optional: add <b>Show Notification</b> “Sent to MeTube”. Name the shortcut <b>MeTube</b>.</li>
+        <li>In YouTube, Safari or another app: <b>Share → MeTube</b>. Downloads start at once.</li></ol>
+        <p class="muted small">The Shortcut talks to MeTube directly, so it works only where your iPhone can reach <span id="s-ios-host"></span> — at home, or over a VPN.</p></div></div>
+      <div class="card"><h2>Android</h2><div class="in"><ol class="steps">
+        <li>Scan the <b>share page</b> QR code above, open it in Chrome, then <b>⋮ → Add to Home screen</b>.</li>
+        <li>In YouTube or another app: <b>Share → Copy link</b>. Tap the MeTube icon on the home screen, paste into the box and tap <b>Download</b>.</li></ol>
+        <p class="muted small">With HTTPS (DSM's reverse proxy, on the Site address tab), Chrome can install MeTube's own page as an app (<b>⋮ → Install app</b>); MeTube then appears straight in Android's Share menu.</p></div></div>
+    </section>
+
+    <section data-page="ytdlp" hidden>
+      <div class="note">MeTube downloads with <b>yt-dlp</b>. Sites change how they deliver video often, and an older yt-dlp then fails — with “Unable to extract”, “Sign in to confirm”, HTTP 403 or “Requested format is not available”. New MeTube releases come every week or two, each with a current yt-dlp: updating MeTube is how yt-dlp stays current.</div>
+      <div id="y-warn"></div>
+      <div class="tiles" id="y-tiles"></div>
+      <div class="card"><h2>Update</h2><div class="in" id="y-upd"></div></div>
+      <div class="card"><h2>How updating works</h2><div class="in"><p class="muted small">Update backs up MeTube's state first (the queue and the lists — your downloaded files aren't touched), downloads the newest MeTube release, starts it, and removes only the old MeTube image. Downloads under way start again where they were. If the new one doesn't start, the version from before comes back. The package also looks for a new release twice a day and shows a badge here; DSM tells you when downloads start failing in a way that suggests yt-dlp is out of date.</p></div></div>
+    </section>
